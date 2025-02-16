@@ -3,5 +3,5 @@ export interface WebhookRequest {
     httpMethod: string;
     headers: string;
     body: string;
-    receivedAt: string;
+    receivedAt: Date;
 }

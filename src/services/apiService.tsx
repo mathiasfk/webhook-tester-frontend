@@ -63,7 +63,11 @@ async function deleteTab(id: number): Promise<void> {
 }
 
 async function fetchRequests(webhookId: string): Promise<WebhookRequest[]> {
-  return fetchWithAuth(`/webhooks/${webhookId}/requests`);
+  const data = await fetchWithAuth(`/webhooks/${webhookId}/requests`);
+  return data.map((request: WebhookRequest) => ({
+    ...request,
+    receivedAt: new Date(request.receivedAt),
+  }));
 }
 
 export const apiService = {

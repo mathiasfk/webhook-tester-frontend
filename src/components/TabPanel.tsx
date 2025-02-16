@@ -19,7 +19,7 @@ export default function TabPanel({ tabs, activeTab }: TabPanelProps) {
       if (activeTab && !loadedTabs.has(activeTab)) {
         try {
           const data = await apiService.fetchRequests(activeTab.toString());
-          setRequests(data);
+          setRequests(data.sort((a, b) => b.receivedAt.getTime() - a.receivedAt.getTime()));
           setLoadedTabs(prev => new Set(prev).add(activeTab));
         } catch (error) {
           console.error("Failed to fetch requests:", error);
@@ -37,7 +37,7 @@ export default function TabPanel({ tabs, activeTab }: TabPanelProps) {
         {requests.map(request => (
           <li className="border-1 bg-amber-200 mb-5" key={request.id}>
             <p><span>Method: </span><span className="font-bold">{request.httpMethod}</span></p>
-            <p>Received At: <span className="font-bold">{request.receivedAt}</span></p>
+            <p>Received At: <span className="font-bold">{request.receivedAt.toISOString()}</span></p>
             <p>Headers: {request.headers}</p>
             <p>Body: {request.body}</p>
           </li>
