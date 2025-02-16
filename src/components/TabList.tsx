@@ -1,7 +1,8 @@
 import { XMarkIcon, PlusIcon } from "@heroicons/react/16/solid";
+import { Webhook } from "../types/Webhook";
 
 interface TabListProps {
-  tabs: { id: number; url: string }[];
+  tabs: Webhook[];
   activeTab: number;
   onTabSelect: (id: number) => void;
   onTabClose: (id: number) => void;

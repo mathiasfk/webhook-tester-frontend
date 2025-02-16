@@ -1,5 +1,7 @@
+import { Webhook } from "../types/Webhook";
+
 interface TabPanelProps {
-    tabs: { id: number; url: string }[]; //TODO: extract to a shared type
+    tabs: Webhook[];
     activeTab: number;
   }
   

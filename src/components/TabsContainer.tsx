@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import TabList from "./TabList";
 import TabPanel from "./TabPanel";
 import { apiService } from "../services/apiService";
+import { Webhook } from "../types/Webhook";
 
 export default function TabsContainer() {
-  const [tabs, setTabs] = useState<{ id: number; url: string }[]>([]);
+  const [tabs, setTabs] = useState<Webhook[]>([]);
   const [activeTab, setActiveTab] = useState<number | null>(null);
 
   useEffect(() => {
@@ -13,7 +14,7 @@ export default function TabsContainer() {
         const data = await apiService.fetchTabs();
         setTabs(data);
         if (data.length > 0) {
-          setActiveTab(data[0].id); // TODO: type safety
+          setActiveTab(data[0].id);
         }
       } catch (error) {
         console.error("Failed to fetch tabs:", error);
