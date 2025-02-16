@@ -57,7 +57,7 @@ export default function TabsContainer() {
     <div className="p-4">
       <TabList 
         tabs={tabs} 
-        activeTab={activeTab || 0} //TODO: when no page exists, create a new one
+        activeTab={activeTab || 0} 
         onTabSelect={setActiveTab} 
         onTabClose={removeTab} 
         onAddTab={addTab} 
