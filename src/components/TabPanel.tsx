@@ -1,34 +1,22 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Webhook } from "../types/Webhook";
 import { WebhookRequest } from "../types/WebhookRequest";
-import { apiService } from "../services/apiService";
 
 interface TabPanelProps {
   tabs: Webhook[];
   activeTab: number;
+  requests: WebhookRequest[];
+  fetchRequests: (webhookId: number) => void;
 }
 
-export default function TabPanel({ tabs, activeTab }: TabPanelProps) {
-  const [requests, setRequests] = useState<WebhookRequest[]>([]);
-  const [loadedTabs, setLoadedTabs] = useState<Set<number>>(new Set());
-
+export default function TabPanel({ tabs, activeTab, requests, fetchRequests }: TabPanelProps) {
   const activeTabData = tabs.find(tab => tab.id === activeTab);
 
   useEffect(() => {
-    const fetchRequests = async () => {
-      if (activeTab && !loadedTabs.has(activeTab)) {
-        try {
-          const data = await apiService.fetchRequests(activeTab.toString());
-          setRequests(data.sort((a, b) => b.receivedAt.getTime() - a.receivedAt.getTime()));
-          setLoadedTabs(prev => new Set(prev).add(activeTab));
-        } catch (error) {
-          console.error("Failed to fetch requests:", error);
-        }
-      }
-    };
-
-    fetchRequests();
-  }, [activeTab, loadedTabs]);
+    if (activeTab) {
+      fetchRequests(activeTab);
+    }
+  }, [activeTab, fetchRequests]);
 
   return (
     <div className="p-4 border rounded-lg">
