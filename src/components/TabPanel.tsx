@@ -1,5 +1,5 @@
 interface TabPanelProps {
-    tabs: { id: number; label: string }[];
+    tabs: { id: number; url: string }[]; //TODO: extract to a shared type
     activeTab: number;
   }
   
@@ -8,8 +8,7 @@ interface TabPanelProps {
   
     return (
       <div className="p-4 border rounded-lg">
-        <h2 className="text-lg font-semibold">{activeTabData?.label}</h2>
-        <p>Conteúdo para {activeTabData?.label}</p>
+        <p>Here we'll show the requests for {activeTabData?.url}</p>
       </div>
     );
   }

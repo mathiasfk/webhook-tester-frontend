@@ -1,7 +1,7 @@
 import { XMarkIcon, PlusIcon } from "@heroicons/react/16/solid";
 
 interface TabListProps {
-  tabs: { id: number; label: string }[];
+  tabs: { id: number; url: string }[];
   activeTab: number;
   onTabSelect: (id: number) => void;
   onTabClose: (id: number) => void;
@@ -19,7 +19,7 @@ export default function TabList({ tabs, activeTab, onTabSelect, onTabClose, onAd
           }`}
           onClick={() => onTabSelect(tab.id)}
         >
-          <span className="truncate">{tab.label}</span>
+          <span className="truncate">{tab.id}</span>
           <XMarkIcon 
             className="w-4 h-4 ml-2 cursor-pointer text-gray-600 hover:text-gray-800"
             onClick={(e) => { e.stopPropagation(); onTabClose(tab.id); }} 
