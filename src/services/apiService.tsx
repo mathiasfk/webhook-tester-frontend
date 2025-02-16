@@ -40,7 +40,27 @@ async function fetchWithAuth(endpoint: string, options: RequestInit = {}) {
   return response.json();
 }
 
+async function createTab() {
+  const token = await getToken();
+  
+  const headers = new Headers();
+  headers.append("Authorization", `${token}`);
+  headers.append("Content-Type", "application/json");
+
+  const response = await fetch(`${API_BASE_URL}/webhooks`, {
+    method: "POST",
+    headers,
+  });
+
+  if (!response.ok) {
+    throw new Error(`API request failed: ${response.statusText}`);
+  }
+
+  return response.json();
+}
+
 export const apiService = {
   getToken,
   fetchWithAuth,
+  createTab,
 };

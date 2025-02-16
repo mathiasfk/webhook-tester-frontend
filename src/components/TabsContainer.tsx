@@ -23,10 +23,14 @@ export default function TabsContainer() {
     fetchTabs();
   }, []);
 
-  const addTab = () => {
-    const newId = tabs.length ? Math.max(...tabs.map(t => t.id)) + 1 : 1;
-    // setTabs([...tabs, { id: newId, label: `Tab ${newId}` }]);
-    setActiveTab(newId);
+  const addTab = async () => {
+    try {
+      const newTab = await apiService.createTab();
+      setTabs([...tabs, newTab]);
+      setActiveTab(newTab.id);
+    } catch (error) {
+      console.error("Failed to create tab:", error);
+    }
   };
 
   const removeTab = (id: number) => {
