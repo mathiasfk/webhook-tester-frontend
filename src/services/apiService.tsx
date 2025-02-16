@@ -1,3 +1,6 @@
+import { WebhookRequest } from "../types/WebhookRequest";
+import { Webhook } from "../types/Webhook";
+
 const API_BASE_URL = "https://localhost:7261";
 const TOKEN_STORAGE_KEY = "webhook_tester_token";
 
@@ -22,7 +25,7 @@ async function getToken(): Promise<string> {
   return token;
 }
 
-async function fetchWithAuth(endpoint: string, options: RequestInit = {}) {
+async function fetchWithAuth(endpoint: string, options: RequestInit = {}): Promise<any> {
   const token = await getToken();
   
   const headers = new Headers(options.headers);
@@ -40,11 +43,11 @@ async function fetchWithAuth(endpoint: string, options: RequestInit = {}) {
   return response.json();
 }
 
-async function fetchTabs() {
+async function fetchTabs(): Promise<Webhook[]> {
   return fetchWithAuth("/webhooks");
 }
 
-async function createTab() {
+async function createTab(): Promise<Webhook> {
   return fetchWithAuth("/webhooks", {
     method: "POST",
     headers: {
@@ -53,10 +56,14 @@ async function createTab() {
   });
 }
 
-async function deleteTab(id: number) {
+async function deleteTab(id: number): Promise<void> {
   return fetchWithAuth(`/webhooks/${id}`, {
     method: "DELETE"
   });
+}
+
+async function fetchRequests(webhookId: string): Promise<WebhookRequest[]> {
+  return fetchWithAuth(`/webhooks/${webhookId}/requests`);
 }
 
 export const apiService = {
@@ -65,4 +72,5 @@ export const apiService = {
   fetchTabs,
   createTab,
   deleteTab,
+  fetchRequests,
 };
