@@ -10,7 +10,7 @@ export default function TabsContainer() {
   useEffect(() => {
     async function fetchTabs() {
       try {
-        const data = await apiService.fetchWithAuth("/webhooks");
+        const data = await apiService.fetchTabs();
         setTabs(data);
         if (data.length > 0) {
           setActiveTab(data[0].id); // TODO: type safety
