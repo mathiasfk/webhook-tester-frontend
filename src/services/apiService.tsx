@@ -53,9 +53,16 @@ async function createTab() {
   });
 }
 
+async function deleteTab(id: number) {
+  return fetchWithAuth(`/webhooks/${id}`, {
+    method: "DELETE"
+  });
+}
+
 export const apiService = {
   getToken,
   fetchWithAuth,
   fetchTabs,
   createTab,
+  deleteTab,
 };

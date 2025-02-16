@@ -33,12 +33,17 @@ export default function TabsContainer() {
     }
   };
 
-  const removeTab = (id: number) => {
+  const removeTab = async (id: number) => {
     if (tabs.length === 1) return;
-    const newTabs = tabs.filter(tab => tab.id !== id);
-    setTabs(newTabs);
-    if (activeTab === id) {
-      setActiveTab(newTabs[0].id);
+    try {
+      await apiService.deleteTab(id);
+      const newTabs = tabs.filter(tab => tab.id !== id);
+      setTabs(newTabs);
+      if (activeTab === id) {
+        setActiveTab(newTabs[0]?.id || null);
+      }
+    } catch (error) {
+      console.error("Failed to delete tab:", error);
     }
   };
 
