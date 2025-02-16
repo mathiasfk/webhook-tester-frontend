@@ -26,7 +26,7 @@ export default function TabsContainer() {
   const addTab = async () => {
     try {
       const newTab = await apiService.createTab();
-      setTabs([...tabs, newTab]);
+      setTabs(prevTabs => [...prevTabs, newTab]);
       setActiveTab(newTab.id);
     } catch (error) {
       console.error("Failed to create tab:", error);
@@ -34,14 +34,19 @@ export default function TabsContainer() {
   };
 
   const removeTab = async (id: number) => {
-    if (tabs.length === 1) return;
     try {
       await apiService.deleteTab(id);
-      const newTabs = tabs.filter(tab => tab.id !== id);
-      setTabs(newTabs);
-      if (activeTab === id) {
-        setActiveTab(newTabs[0]?.id || null);
-      }
+      setTabs(prevTabs => {
+        const newTabs = prevTabs.filter(tab => tab.id !== id);
+        if (newTabs.length > 0) {
+          if (activeTab === id) {
+            setActiveTab(newTabs[0].id);
+          }
+        } else {
+          setActiveTab(null);
+        }
+        return newTabs;
+      });
     } catch (error) {
       console.error("Failed to delete tab:", error);
     }
