@@ -21,8 +21,8 @@ export default function TabPanel({ tabs, activeTab, requests, fetchRequests, sel
   }, [activeTab, fetchRequests]);
 
   return (
-    <div className="p-4 border rounded-lg flex">
-      <div className="w-1/3 border-r pr-4">
+    <div className="p-4 border rounded-lg flex flex-grow h-full overflow-hidden">
+      <div className="w-1/3 border-r pr-4 overflow-y-auto">
         <p className="mb-2">Requests for {activeTabData?.url}</p>
         <ul>
           {requests.map(request => (
@@ -37,7 +37,7 @@ export default function TabPanel({ tabs, activeTab, requests, fetchRequests, sel
           ))}
         </ul>
       </div>
-      <div className="w-2/3 pl-4">
+      <div className="w-2/3 pl-4 overflow-y-auto">
         {selectedRequest ? (
           <div>
             <h2 className="text-xl font-bold mb-2">Request Details</h2>

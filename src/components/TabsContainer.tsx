@@ -121,7 +121,7 @@ export default function TabsContainer() {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 flex flex-col h-screen">
       {error && <div className="text-red-500 mb-4">{error}</div>}
       <TabList 
         tabs={tabs} 
