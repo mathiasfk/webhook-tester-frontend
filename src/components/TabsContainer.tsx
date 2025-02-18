@@ -9,7 +9,7 @@ export default function TabsContainer() {
   const [tabs, setTabs] = useState<Webhook[]>([]);
   const [activeTab, setActiveTab] = useState<number | null>(null);
   const [requests, setRequests] = useState<{ [key: number]: WebhookRequest[] }>({});
-  const [eventSource, setEventSource] = useState<EventSource | null>(null);
+  const [eventSources, setEventSources] = useState<{ [key: number]: EventSource }>({});
 
   useEffect(() => {
     async function fetchTabs() {
@@ -28,11 +28,7 @@ export default function TabsContainer() {
   }, []);
 
   useEffect(() => {
-    if (activeTab !== null) {
-      if (eventSource) {
-        eventSource.close();
-      }
-
+    if (activeTab !== null && !eventSources[activeTab]) {
       const newEventSource = apiService.openSSEConnection(activeTab, (newRequest) => {
         setRequests(prevRequests => ({
           ...prevRequests,
@@ -40,15 +36,12 @@ export default function TabsContainer() {
         }));
       });
 
-      setEventSource(newEventSource);
+      setEventSources(prevEventSources => ({
+        ...prevEventSources,
+        [activeTab]: newEventSource
+      }));
     }
-
-    return () => {
-      if (eventSource) {
-        eventSource.close();
-      }
-    };
-  }, [activeTab]);
+  }, [activeTab, eventSources]);
 
   const addTab = async () => {
     try {
@@ -62,6 +55,15 @@ export default function TabsContainer() {
 
   const removeTab = async (id: number) => {
     try {
+      if (eventSources[id]) {
+        eventSources[id].close();
+        setEventSources(prevEventSources => {
+          const newEventSources = { ...prevEventSources };
+          delete newEventSources[id];
+          return newEventSources;
+        });
+      }
+
       await apiService.deleteTab(id);
       setTabs(prevTabs => {
         const newTabs = prevTabs.filter(tab => tab.id !== id);
