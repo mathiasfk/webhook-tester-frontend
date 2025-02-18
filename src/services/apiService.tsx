@@ -70,6 +70,23 @@ async function fetchRequests(webhookId: string): Promise<WebhookRequest[]> {
   }));
 }
 
+function openSSEConnection(webhookId: number, onMessage: (request: WebhookRequest) => void): EventSource {
+  const eventSource = new EventSource(`${API_BASE_URL}/webhooks/${webhookId}/stream`);
+  
+  eventSource.onmessage = (event) => {
+    const request: WebhookRequest = JSON.parse(event.data);
+    request.receivedAt = new Date(request.receivedAt);
+    onMessage(request);
+  };
+
+  eventSource.onerror = (error) => {
+    console.error("SSE connection error:", error);
+    eventSource.close();
+  };
+
+  return eventSource;
+}
+
 export const apiService = {
   getToken,
   fetchWithAuth,
@@ -77,4 +94,5 @@ export const apiService = {
   createTab,
   deleteTab,
   fetchRequests,
+  openSSEConnection,
 };

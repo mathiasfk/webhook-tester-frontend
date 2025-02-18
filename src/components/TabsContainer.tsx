@@ -9,6 +9,7 @@ export default function TabsContainer() {
   const [tabs, setTabs] = useState<Webhook[]>([]);
   const [activeTab, setActiveTab] = useState<number | null>(null);
   const [requests, setRequests] = useState<{ [key: number]: WebhookRequest[] }>({});
+  const [eventSource, setEventSource] = useState<EventSource | null>(null);
 
   useEffect(() => {
     async function fetchTabs() {
@@ -25,6 +26,29 @@ export default function TabsContainer() {
 
     fetchTabs();
   }, []);
+
+  useEffect(() => {
+    if (activeTab !== null) {
+      if (eventSource) {
+        eventSource.close();
+      }
+
+      const newEventSource = apiService.openSSEConnection(activeTab, (newRequest) => {
+        setRequests(prevRequests => ({
+          ...prevRequests,
+          [activeTab]: [newRequest, ...(prevRequests[activeTab] || [])]
+        }));
+      });
+
+      setEventSource(newEventSource);
+    }
+
+    return () => {
+      if (eventSource) {
+        eventSource.close();
+      }
+    };
+  }, [activeTab]);
 
   const addTab = async () => {
     try {
