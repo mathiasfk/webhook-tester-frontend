@@ -10,6 +10,8 @@ export default function TabsContainer() {
   const [activeTab, setActiveTab] = useState<number | null>(null);
   const [requests, setRequests] = useState<{ [key: number]: WebhookRequest[] }>({});
   const [eventSources, setEventSources] = useState<{ [key: number]: EventSource }>({});
+  const [selectedRequests, setSelectedRequests] = useState<{ [key: number]: WebhookRequest | null }>({});
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchTabs() {
@@ -44,10 +46,16 @@ export default function TabsContainer() {
   }, [activeTab, eventSources]);
 
   const addTab = async () => {
+    if (tabs.length >= 3) {
+      setError("You can only have a maximum of 3 tabs active at a time.");
+      return;
+    }
+
     try {
       const newTab = await apiService.createTab();
       setTabs(prevTabs => [...prevTabs, newTab]);
       setActiveTab(newTab.id);
+      setError(null); // Clear any previous error
     } catch (error) {
       console.error("Failed to create tab:", error);
     }
@@ -81,6 +89,11 @@ export default function TabsContainer() {
         delete newRequests[id];
         return newRequests;
       });
+      setSelectedRequests(prevSelectedRequests => {
+        const newSelectedRequests = { ...prevSelectedRequests };
+        delete newSelectedRequests[id];
+        return newSelectedRequests;
+      });
     } catch (error) {
       console.error("Failed to delete tab:", error);
     }
@@ -100,8 +113,16 @@ export default function TabsContainer() {
     }
   };
 
+  const handleRequestClick = (webhookId: number, request: WebhookRequest) => {
+    setSelectedRequests(prevSelectedRequests => ({
+      ...prevSelectedRequests,
+      [webhookId]: request
+    }));
+  };
+
   return (
     <div className="p-4">
+      {error && <div className="text-red-500 mb-4">{error}</div>}
       <TabList 
         tabs={tabs} 
         activeTab={activeTab || 0} 
@@ -114,6 +135,8 @@ export default function TabsContainer() {
         activeTab={activeTab || 0} 
         requests={requests[activeTab || 0] || []} 
         fetchRequests={fetchRequests} 
+        selectedRequest={selectedRequests[activeTab || 0] || null}
+        onRequestClick={handleRequestClick}
       />
     </div>
   );
