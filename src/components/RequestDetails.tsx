@@ -1,17 +1,13 @@
 import { WebhookRequest } from "../types/WebhookRequest";
+import JsonViewer from "./JsonViewer";
 
 interface RequestDetailsProps {
   selectedRequest: WebhookRequest | null;
 }
 
 export default function RequestDetails({ selectedRequest }: RequestDetailsProps) {
-  const formatBody = (body: string) => {
-    try {
-      const json = JSON.parse(body);
-      return <pre>{JSON.stringify(json, null, 2)}</pre>;
-    } catch (error) {
-      return <pre>{body}</pre>;
-    }
+  const handleFieldClick = (path: string, value: any) => {
+    console.log(`Field clicked: ${path}`, value);
   };
 
   return (
@@ -30,7 +26,7 @@ export default function RequestDetails({ selectedRequest }: RequestDetailsProps)
             ))}
           </ul>
           <p><span className="font-bold">Body: </span></p>
-          {formatBody(selectedRequest.body)}
+          <JsonViewer json={selectedRequest.body} onFieldClick={handleFieldClick} />
         </div>
       ) : (
         <p>Select a request to see details</p>
