@@ -31,7 +31,7 @@ const JsonViewer: React.FC<JsonViewerProps> = ({ json, onFieldClick }) => {
             {Object.entries(data).map(([key, value], index, array) => (
               <li key={key}>
                 <span
-                  className="cursor-pointer hover:font-bold"
+                  className="cursor-pointer hover:font-bold hover:underline"
                   onClick={() => onFieldClick && onFieldClick(`${path}.${key}`, value)}
                 >
                   {key}:

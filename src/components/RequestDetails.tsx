@@ -16,12 +16,20 @@ export default function RequestDetails({ selectedRequest }: RequestDetailsProps)
         <div>
           <h2 className="text-xl font-bold mb-2">Request Details</h2>
           <p><span className="font-bold">Method: </span>{selectedRequest.httpMethod}</p>
-          <p><span className="font-bold">Received At: </span>{new Date(selectedRequest.receivedAt).toLocaleString()}</p>
+          <p>
+            <span className="font-bold cursor-pointer hover:underline" onClick={() => handleFieldClick("receivedAt", selectedRequest.receivedAt)}>
+              Received At:
+            </span>
+            {` ${new Date(selectedRequest.receivedAt).toLocaleString()}`}
+          </p>
           <p><span className="font-bold">Headers: </span></p>
           <ul>
             {Object.entries(selectedRequest.headers).map(([key, values]) => (
               <li key={key}>
-                <span className="font-bold">{key}: </span>{values.join(", ")}
+                <span className="font-bold cursor-pointer hover:underline" onClick={() => handleFieldClick(`headers.${key}`, values)}>
+                  {key}:
+                </span>
+                {` ${values.join(", ")}`}
               </li>
             ))}
           </ul>
