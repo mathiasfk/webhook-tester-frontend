@@ -12,6 +12,7 @@ export default function TabsContainer() {
   const [eventSources, setEventSources] = useState<{ [key: number]: EventSource }>({});
   const [selectedRequests, setSelectedRequests] = useState<{ [key: number]: WebhookRequest | null }>({});
   const [error, setError] = useState<string | null>(null);
+  const [displayField, setDisplayField] = useState<string>("receivedAt");
 
   useEffect(() => {
     async function fetchTabs() {
@@ -129,15 +130,17 @@ export default function TabsContainer() {
         onTabSelect={setActiveTab} 
         onTabClose={removeTab} 
         onAddTab={addTab} 
-      />
-      <TabPanel 
-        tabs={tabs} 
-        activeTab={activeTab || 0} 
-        requests={requests[activeTab || 0] || []} 
-        fetchRequests={fetchRequests} 
-        selectedRequest={selectedRequests[activeTab || 0] || null}
-        onRequestClick={handleRequestClick}
-      />
+        />
+        <TabPanel 
+          tabs={tabs} 
+          activeTab={activeTab || 0} 
+          requests={requests[activeTab || 0] || []} 
+          fetchRequests={fetchRequests} 
+          selectedRequest={selectedRequests[activeTab || 0] || null}
+          onRequestClick={handleRequestClick}
+          setDisplayField={setDisplayField}
+          displayField={displayField}
+        />
     </div>
   );
 }

@@ -3,11 +3,13 @@ import JsonViewer from "./JsonViewer";
 
 interface RequestDetailsProps {
   selectedRequest: WebhookRequest | null;
+  setDisplayField: (field: string) => void;
 }
 
-export default function RequestDetails({ selectedRequest }: RequestDetailsProps) {
+export default function RequestDetails({ selectedRequest, setDisplayField }: RequestDetailsProps) {
   const handleFieldClick = (path: string, value: any) => {
     console.log(`Field clicked: ${path}`, value);
+    setDisplayField(path);
   };
 
   return (
@@ -19,7 +21,7 @@ export default function RequestDetails({ selectedRequest }: RequestDetailsProps)
           <p>
             <span className="font-bold cursor-pointer hover:underline" onClick={() => handleFieldClick("receivedAt", selectedRequest.receivedAt)}>
               Received At:
-            </span>
+              </span>
             {` ${new Date(selectedRequest.receivedAt).toLocaleString()}`}
           </p>
           <p><span className="font-bold">Headers: </span></p>

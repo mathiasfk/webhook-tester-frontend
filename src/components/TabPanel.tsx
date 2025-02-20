@@ -11,9 +11,13 @@ interface TabPanelProps {
   fetchRequests: (webhookId: number) => void;
   selectedRequest: WebhookRequest | null;
   onRequestClick: (webhookId: number, request: WebhookRequest) => void;
+  displayField: string;
+  setDisplayField: (field: string) => void;
 }
 
-export default function TabPanel({ activeTab, requests, fetchRequests, selectedRequest, onRequestClick }: TabPanelProps) {
+export default function TabPanel({
+  activeTab, requests, fetchRequests, selectedRequest, onRequestClick, displayField, setDisplayField
+}: TabPanelProps) {
 
   useEffect(() => {
     if (activeTab) {
@@ -26,9 +30,13 @@ export default function TabPanel({ activeTab, requests, fetchRequests, selectedR
       <RequestList 
         requests={requests} 
         selectedRequest={selectedRequest} 
-        onRequestClick={(request) => onRequestClick(activeTab, request)} 
+        onRequestClick={(request) => onRequestClick(activeTab, request)}
+        displayField={displayField}
       />
-      <RequestDetails selectedRequest={selectedRequest} />
+      <RequestDetails
+        selectedRequest={selectedRequest}
+        setDisplayField={setDisplayField}
+      />
     </div>
   );
 }
