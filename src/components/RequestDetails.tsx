@@ -5,6 +5,15 @@ interface RequestDetailsProps {
 }
 
 export default function RequestDetails({ selectedRequest }: RequestDetailsProps) {
+  const formatBody = (body: string) => {
+    try {
+      const json = JSON.parse(body);
+      return <pre>{JSON.stringify(json, null, 2)}</pre>;
+    } catch (error) {
+      return <pre>{body}</pre>;
+    }
+  };
+
   return (
     <div className="w-2/3 pl-4 overflow-y-auto">
       {selectedRequest ? (
@@ -20,7 +29,8 @@ export default function RequestDetails({ selectedRequest }: RequestDetailsProps)
               </li>
             ))}
           </ul>
-          <p><span className="font-bold">Body: </span>{selectedRequest.body}</p>
+          <p><span className="font-bold">Body: </span></p>
+          {formatBody(selectedRequest.body)}
         </div>
       ) : (
         <p>Select a request to see details</p>
