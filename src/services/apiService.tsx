@@ -1,7 +1,7 @@
 import { WebhookRequest } from "../types/WebhookRequest";
 import { Webhook } from "../types/Webhook";
 
-const API_BASE_URL = "https://localhost:7261";
+const API_BASE_URL = "https://localhost:7159";
 const TOKEN_STORAGE_KEY = "webhook_tester_token";
 
 async function getToken(): Promise<string> {
@@ -18,7 +18,7 @@ async function getToken(): Promise<string> {
     }
 
     const data = await response.json();
-    token = data.token;
+    token = data;
     localStorage.setItem(TOKEN_STORAGE_KEY, token);
   }
 
