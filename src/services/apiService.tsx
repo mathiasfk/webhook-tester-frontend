@@ -1,7 +1,7 @@
 import { WebhookRequest } from "../types/WebhookRequest";
 import { Webhook } from "../types/Webhook";
 
-const API_BASE_URL = "https://localhost:7159";
+const API_BASE_URL = import.meta.env.VITE_API_URL || "https://localhost:7159";
 const TOKEN_STORAGE_KEY = "webhook_tester_token";
 
 async function getToken(): Promise<string> {
